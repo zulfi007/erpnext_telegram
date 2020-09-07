@@ -9,6 +9,7 @@ from frappe.model.document import Document
 from frappe.utils import get_url_to_form
 from frappe.utils.data import quoted
 from frappe import _
+from bs4 import BeautifulSoup
 
 class TelegramSettings(Document):
 	pass
@@ -29,7 +30,8 @@ def send_to_telegram(telegram_user, message, reference_doctype=None, reference_n
 		doc_url = get_url_to_form(reference_doctype, reference_name)
 		telegram_doc_link = _("[Click to open the document]({0})").format(doc_url)
 		if message:
-			message = space + str(message) + space + str(telegram_doc_link)
+			soup = BeautifulSoup(message)
+			message = soup.get_text('\n') + space + str(telegram_doc_link)
 			if type(attachment) is str:
 				attachment = int(attachment)
 			else:
