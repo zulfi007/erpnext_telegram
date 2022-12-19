@@ -169,7 +169,7 @@ def get_context(context):
 
     def get_dynamic_recipients(self, doc):
         recipients_telegram_user_list = []
-        field_names = ["Customer", "Supplier", "Student", "Employee"]
+        field_names = ["Customer", "Supplier", "Student", "Employee", "User"]
         if self.dynamic_recipients:
             fields = get_doc_fields(self.document_type)
             for d in fields:
@@ -183,12 +183,10 @@ def get_context(context):
                     else:
                         break
 
-                filters = (
-                    {
+                filters = {
                         "party": party,
                         "telegram_user": doc.get(d["fieldname"]),
-                    },
-                )
+                    }
                 telegram_user_list = frappe.get_all(
                     "Telegram User Settings",
                     filters=filters,
@@ -318,8 +316,9 @@ def run_telegram_notifications(doc, method):
 
     def _evaluate_alert(alert):
         if not alert.name in doc.flags.tel_notifications_executed:
-            evaluate_alert(doc, alert.name, alert.event)
-            doc.flags.tel_notifications_executed.append(alert.name)
+            if frappe.db.exists("Telegram Notification", alert.name):
+               evaluate_alert(doc, alert.name, alert.event)
+               doc.flags.tel_notifications_executed.append(alert.name)
 
     event_map = {
         "on_update": "Save",
@@ -435,7 +434,7 @@ def get_context(doc):
 def get_doc_fields(doctype_name):
     fields = frappe.get_meta(doctype_name).fields
     filed_list = []
-    field_names = ["Customer", "Supplier", "Student", "Employee"]
+    field_names = ["Customer", "Supplier", "Student", "Employee", "User"]
     for d in fields:
         if d.fieldtype == "Link" and d.options in field_names:
             field = {
