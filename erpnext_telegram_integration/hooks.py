@@ -141,7 +141,7 @@ scheduler_events = {
           "erpnext_telegram_integration.extra_notifications.doctype.date_notification.date_notification.trigger_daily_alerts",
 	],
      "cron": {
-          "30 9 * * *": [
+          "30 10 * * *": [
                "erpnext_telegram_integration.erpnext_telegram_integration.doctype.sms_notification.sms_notification.trigger_daily_alerts",
           ],
 	},
