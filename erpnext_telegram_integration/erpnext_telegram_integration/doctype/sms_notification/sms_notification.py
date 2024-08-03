@@ -249,12 +249,13 @@ class SMSNotification(Document):
 def run_sms_notifications(doc, method):
  frappe.enqueue(
         'erpnext_telegram_integration.erpnext_telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications_in_background',        
-        param1=doc,
-        param2=method
+        doc=doc,
+        method1=method
 
     )
 
-def run_sms_notifications_in_background(doc, method):
+def run_sms_notifications_in_background(doc, method1):
+    method=method1
     """Run notifications for this method"""
     if frappe.flags.in_import or frappe.flags.in_patch or frappe.flags.in_install:
         return
