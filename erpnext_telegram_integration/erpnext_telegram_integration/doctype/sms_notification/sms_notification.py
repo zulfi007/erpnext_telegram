@@ -248,7 +248,9 @@ class SMSNotification(Document):
 @frappe.whitelist()
 def run_sms_notifications(doc, method):
  frappe.enqueue(
-        'erpnext_telegram_integration.erpnext_telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications_in_background',
+        'erpnext_telegram_integration.erpnext_telegram_integration.doctype.sms_notification.sms_notification.run_sms_notifications_in_background',        
+        param1=doc,
+        param2=method
 
     )
 
